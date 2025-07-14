@@ -2,16 +2,66 @@
 
 set -x
 
+# Default values
 MODELNAME=pure  # [pure, hybrid]
 MODELSIZE=340M  # [170M, 340M]
 LR=3e-4
 SEQLEN=2k  # [2k, 4k]
 B_TOKENS=15  # NOTE! this assumes the default hgrn.toml
 
-additional_args=""
-if [ $# -ne 0 ]; then
-    additional_args="$1"
-fi
+# Parse command line arguments
+while getopts "m:s:l:q:b:h" opt; do
+    case $opt in
+        m)
+            MODELNAME="$OPTARG"
+            ;;
+        s)
+            MODELSIZE="$OPTARG"
+            ;;
+        l)
+            LR="$OPTARG"
+            ;;
+        q)
+            SEQLEN="$OPTARG"
+            ;;
+        b)
+            B_TOKENS="$OPTARG"
+            ;;
+        h)
+            echo "Usage: $0 [OPTIONS] [-- additional_args]"
+            echo "Options:"
+            echo "  -m MODEL_NAME   Model name: pure or hybrid (default: pure)"
+            echo "  -s MODEL_SIZE   Model size: 170M or 340M (default: 340M)"
+            echo "  -l LEARNING_RATE Learning rate (default: 3e-4)"
+            echo "  -q SEQ_LEN      Sequence length: 2k or 4k (default: 2k)"
+            echo "  -b B_TOKENS     B tokens (default: 15)"
+            echo "  -h              Show this help message"
+            echo ""
+            echo "Use -- to separate script options from additional arguments:"
+            echo "Example: $0 -m hybrid -s 170M -- --some-additional-flag"
+            echo "Example: $0 -m hybrid -s 170M -l 5e-4 -q 4k -b 10"
+            exit 0
+            ;;
+        \?)
+            # Check if this is the start of additional arguments
+            if [[ "${!OPTIND}" == --* ]]; then
+                # This looks like additional arguments, stop parsing options
+                ((OPTIND--))
+                break
+            else
+                echo "Invalid option: -$OPTARG" >&2
+                echo "Use -h for help, or use -- to separate options from additional arguments"
+                exit 1
+            fi
+            ;;
+    esac
+done
+
+# Shift past the processed options
+shift $((OPTIND-1))
+
+# Remaining arguments are additional_args
+additional_args="$*"
 
 echo "additional_args: $additional_args"
 
