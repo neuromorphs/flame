@@ -6,6 +6,7 @@ data
 
 # bash scripts
 *.sh
+!submit*.sh
 
 # docs
 docs/_build

@@ -1,0 +1,4 @@
+export HF_TOKEN=placeholder
+export WANDB_ENTITY=rug-minds
+export WANDB_PROJECT=lt25-hgrn
+export WANDB_API_KEY=placeholder
