@@ -1,3 +1,34 @@
+# Setup for LT25 @ Telluride
+
+Set the environment variables correctly:
+```
+cp env-copy .env
+```
+then open the `.env` file and set the `HF_TOKEN`, `HF_HOME`, and `WANDB_API_KEY` (and any other env variables you need).
+
+Install dependencies:
+```
+uv sync
+uv pip uninstall flash-linear-attention
+uv pip install -U git+https://github.com/fla-org/flash-linear-attention
+uv pip install git+https://github.com/pytorch/torchtitan.git@5e2033c
+# optional dependency (needs to be installed on a GPU):
+uv pip install flash-attn --no-build-isolation
+```
+
+If you haven't already, download the datasets with:
+```
+uv run python download_dataset.py
+```
+
+Finally, you can train the HGRN model with the `train-hgrn.sh` script. There are slurm wrappers for this script called `submit-job-{name}.sh` which you can launch with `sbatch submit-job-{name}.sh`. 
+
+### Configurations
+
+The model configurations are in `configs/hgrn_{size}.json`. 
+
+The training configurations are in `train_configs/hgrn_{...}.toml`. These are used as defaults and overwritten by the command line arguments in `train-hgrn.sh`. 
+
 <div align="center">
 
 # 🔥 Flame: Flash Language Modeling Made Easy

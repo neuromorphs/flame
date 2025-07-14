@@ -7,6 +7,7 @@ data
 # bash scripts
 *.sh
 !submit*.sh
+!train*.sh
 
 # docs
 docs/_build
