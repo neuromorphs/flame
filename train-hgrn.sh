@@ -2,9 +2,10 @@
 
 set -x
 
-MODELSIZE=170M
+MODELNAME=pure  # [pure, hybrid]
+MODELSIZE=340M  # [170M, 340M]
 LR=3e-4
-SEQLEN=2k
+SEQLEN=2k  # [2k, 4k]
 B_TOKENS=15  # NOTE! this assumes the default hgrn.toml
 
 additional_args=""
@@ -33,8 +34,8 @@ nvidia-smi
 #####################################
 
 STEPS=$((1271*$B_TOKENS))
-WANDB_NAME=pure-${MODELSIZE}-${B_TOKENS}b-lr${LR}-seq${SEQLEN}
-DUMPFOLDER=exp/hgrn-pure-${MODELSIZE}-seq${SEQLEN}/${B_TOKENS}b.steps${STEPS}.lr${LR}
+WANDB_NAME=${MODELNAME}-${MODELSIZE}-${B_TOKENS}b-lr${LR}-seq${SEQLEN}
+DUMPFOLDER=exp/hgrn-${MODELNAME}-${MODELSIZE}-seq${SEQLEN}/${B_TOKENS}b.steps${STEPS}.lr${LR}
 
 export WANDB_NAME=${WANDB_NAME}
 
@@ -52,7 +53,16 @@ else
     exit 1
 fi
 
+# set model config (pure or hybrid)
+if [ $MODELNAME == "pure" ]; then
+    MODELCONFIG=configs/hgrn_${MODELSIZE}.json
+else
+    MODELCONFIG=configs/hgrn_hyb_${MODELSIZE}.json
+fi
+
+echo "MODELNAME: $MODELNAME"
 echo "MODELSIZE: $MODELSIZE"
+echo "MODELCONFIG: $MODELCONFIG"
 echo "STEPS: $STEPS"
 echo "LR: $LR"
 echo "B_TOKENS: $B_TOKENS"
@@ -65,7 +75,7 @@ echo "SEQLEN_INT: $SEQLEN_INT"
 
 bash train.sh \
   --job.config_file train_configs/hgrn.toml \
-  --model.config configs/hgrn_${MODELSIZE}.json \
+  --model.config $MODELCONFIG \
   --model.tokenizer_path mistralai/Mistral-7B-v0.1 \
   --training.steps $STEPS \
   --training.dataset HuggingFaceTB/smollm-corpus \
