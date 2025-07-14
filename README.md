@@ -9,6 +9,7 @@ then open the `.env` file and set the `HF_TOKEN`, `HF_HOME`, and `WANDB_API_KEY`
 Install dependencies:
 ```
 uv sync
+source .venv/bin/activate
 uv pip uninstall flash-linear-attention
 uv pip install -U git+https://github.com/fla-org/flash-linear-attention
 uv pip install git+https://github.com/pytorch/torchtitan.git@5e2033c
