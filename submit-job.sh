@@ -7,8 +7,9 @@
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
 
+set -x
+
 # Activate virtual environment
-python -m venv .venv
 source .venv/bin/activate
 
 # Load environment variables
@@ -17,14 +18,14 @@ source .env
 # Print GPU status
 nvidia-smi
 
-##################################
+#####################################
 # to decide the steps:
-##################################
+#####################################
 # SEQLEN=2k
-### 2048*48=98,304 tokens per step
-### 10,172 steps = 1B tokens
-### 152,580 steps = 15B tokens
-##################################
+### 2048*48*8=786,432 tokens per step
+### 1,271 steps = 1B tokens
+### 19,074 steps = 15B tokens
+#####################################
 
 SEQLEN=2k
 STEPS=2048
@@ -33,6 +34,8 @@ LR=3e-4
 DUMPFOLDER=exp/hgrn-340M-${SEQLEN}-pure/steps${STEPS}.lr${LR}
 bash train.sh \
   --job.config_file train_configs/hgrn_${SEQLEN}.toml \
+  --model.config fla-hub/transformer-1.3B-100B \
+  --model.tokenizer_path mistralai/Mistral-7B-v0.1 \
   --training.steps $STEPS \
   --training.dataset HuggingFaceTB/smollm-corpus \
   --training.dataset_name fineweb-edu-dedup \
