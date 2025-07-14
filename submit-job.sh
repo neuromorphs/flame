@@ -17,10 +17,14 @@ source .env
 # Print GPU status
 nvidia-smi
 
-DUMPFOLDER=exp/hgrn-340M-8K-full/batch32.seqlen65k.context8k.warmup1024.update1.steps2048000.lr3e-4.wsd
+SEQLEN=2k
+STEPS=204800
+LR=3e-4
+
+DUMPFOLDER=exp/hgrn-340M-${SEQLEN}-pure/steps${STEPS}.lr${LR}
 bash train.sh \
-  --job.config_file train_configs/hgrn.toml \
-  --training.steps 204800 \
+  --job.config_file train_configs/hgrn_${SEQLEN}.toml \
+  --training.steps $STEPS \
   --training.dataset HuggingFaceTB/smollm-corpus \
   --training.dataset_name fineweb-edu-dedup \
   --training.dataset_split train \
