@@ -18,14 +18,17 @@ Welcome to 🔥 `flame`, a minimal and efficient framework built on `torchtitan`
 To get started, clone the `flame` repository and install the required dependencies:
 
 ```bash
-git clone https://github.com/fla-org/flame.git
+git clone https://github.com/neuromorphs/flame.git
 cd flame
 pip install .
 ```
 
 Install the latest version of fla
-```
-pip uninstall flash-linear-attention && pip install -U --no-use-pep517 git+https://github.com/fla-org/flash-linear-attention
+```bash
+pip uninstall flash-linear-attention
+git clone https://github.com/neuromorphs/flash-linear-attention.git
+cd flash-linear-attention
+pip install .
 ```
 
 [Important] Install specific version of torchtitan
