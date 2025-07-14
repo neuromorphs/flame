@@ -17,8 +17,17 @@ source .env
 # Print GPU status
 nvidia-smi
 
+##################################
+# to decide the steps:
+##################################
+# SEQLEN=2k
+### 2048*48=98,304 tokens per step
+### 10,172 steps = 1B tokens
+### 152,580 steps = 15B tokens
+##################################
+
 SEQLEN=2k
-STEPS=204800
+STEPS=2048
 LR=3e-4
 
 DUMPFOLDER=exp/hgrn-340M-${SEQLEN}-pure/steps${STEPS}.lr${LR}
