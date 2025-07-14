@@ -2,6 +2,11 @@
 
 set -x
 
+MODELSIZE=170M
+LR=3e-4
+SEQLEN=2k
+B_TOKENS=15  # NOTE! this assumes the default hgrn.toml
+
 additional_args=""
 if [ $# -ne 0 ]; then
     additional_args="$1"
@@ -27,12 +32,11 @@ nvidia-smi
 ### 19,074 steps = 15B tokens
 #####################################
 
-B_TOKENS=15
-LR=3e-4
-SEQLEN=2k
 STEPS=$((1271*$B_TOKENS))
-WANDB_NAME=pure-340M-${B_TOKENS}b-lr${LR}-seq${SEQLEN}
-DUMPFOLDER=exp/hgrn-pure-340M-seq${SEQLEN}/${B_TOKENS}b.steps${STEPS}.lr${LR}
+WANDB_NAME=pure-${MODELSIZE}-${B_TOKENS}b-lr${LR}-seq${SEQLEN}
+DUMPFOLDER=exp/hgrn-pure-${MODELSIZE}-seq${SEQLEN}/${B_TOKENS}b.steps${STEPS}.lr${LR}
+
+export WANDB_NAME=${WANDB_NAME}
 
 # set bsz, seqlen, context based on seqlen
 if [ $SEQLEN == "2k" ]; then
@@ -48,6 +52,7 @@ else
     exit 1
 fi
 
+echo "MODELSIZE: $MODELSIZE"
 echo "STEPS: $STEPS"
 echo "LR: $LR"
 echo "B_TOKENS: $B_TOKENS"
@@ -60,7 +65,7 @@ echo "SEQLEN_INT: $SEQLEN_INT"
 
 bash train.sh \
   --job.config_file train_configs/hgrn.toml \
-  --model.config configs/hgrn_340M.json \
+  --model.config configs/hgrn_${MODELSIZE}.json \
   --model.tokenizer_path mistralai/Mistral-7B-v0.1 \
   --training.steps $STEPS \
   --training.dataset HuggingFaceTB/smollm-corpus \
