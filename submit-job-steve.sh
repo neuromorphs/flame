@@ -10,4 +10,4 @@
 set -x
 module load 2024
 module load CUDA/12.6.0
-NGPU=4 bash train-hgrn.sh
+NGPU=4 bash train-hgrn.sh --training.streaming
