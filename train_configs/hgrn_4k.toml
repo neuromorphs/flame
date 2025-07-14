@@ -14,7 +14,7 @@
 ########################
 
 [model]
-config = "configs/hgrn_340M.json"
+config = "fla-hub/transformer-1.3B-100B"
 tokenizer_path = "mistralai/Mistral-7B-v0.1"
 
 [job]
