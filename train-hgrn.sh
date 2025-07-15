@@ -83,7 +83,9 @@ nvidia-smi
 ### 19,074 steps = 15B tokens
 #####################################
 
-STEPS=$((1271*$B_TOKENS))
+# Calculate base steps and round up to next multiple of 2048
+STEPS_BASE=$((1271*$B_TOKENS))
+STEPS=$((2048 * (($STEPS_BASE + 2047) / 2048)))
 WANDB_NAME=${MODELNAME}-${MODELSIZE}-${B_TOKENS}b-lr${LR}-seq${SEQLEN}
 DUMPFOLDER=exp/hgrn-${MODELNAME}-${MODELSIZE}-seq${SEQLEN}/${B_TOKENS}b.steps${STEPS}.lr${LR}
 
