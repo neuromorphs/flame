@@ -141,4 +141,5 @@ bash train.sh \
   --training.batch_size $BATCHSIZE \
   --training.seq_len $SEQLEN_INT \
   --training.context_len $CONTEXTLEN \
+  --optimizer.lr $LR \
   $additional_args
