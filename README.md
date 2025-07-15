@@ -13,7 +13,8 @@ source .venv/bin/activate
 uv pip uninstall flash-linear-attention
 uv pip install -U git+https://github.com/fla-org/flash-linear-attention
 uv pip install git+https://github.com/pytorch/torchtitan.git@5e2033c
-# optional dependency (needs to be installed on a GPU):
+# optional dependency (needs to be installed with CUDA):
+module load cuda/12.6.2
 uv pip install flash-attn --no-build-isolation
 ```
 
