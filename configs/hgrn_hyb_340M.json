@@ -15,7 +15,7 @@
     "attn": {
         "layers": [
             0, 
-            12
+            23
         ],
         "num_heads": 16,
         "num_kv_heads": 8,
